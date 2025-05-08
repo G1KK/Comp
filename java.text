@@ -1,0 +1,90 @@
+# Quelques algorithmes Java pour lire les données d'un fichier
+
+Ce sont des algorithmes utiles pour les concours ou pour des applications non interactives où l'ensemble des 
+données sont fournies automatiquement, sans interaction
+
+## Structure de base
+
+Tous les extraits présument que vous êtes dans la méthode `main` d'un fichier `X.java` avec le contenu suivant :
+
+```java
+import java.util.*;
+import java.io.*;
+
+public class X {
+
+    final static String INPUT_DATA = "path/to/data.txt";
+
+    public static void main(String[] args) {
+        // déclarez vos structures des données et variables ici
+        try (Scanner in = new Scanner(new File(INPUT_DATA))) {
+            // code pour extraire les données ici 
+        } catch (FileNotFoundException fnf) {
+            System.out.println("Le nom du fichier source est introuvable");
+            return;
+        }
+        // code pour utiliser les données ici
+    }
+}
+```
+
+## Extractions de données à partir d'un fichier
+
+### Un seul entier
+
+```java
+int num;
+// ...
+    // dans le try(Scanner ...)
+    String line = in.nextLine();
+    num = Integer.parseInt(line);
+//...
+```
+
+### Un seul nombre décimal
+
+```java
+double val;
+// ...
+    // dans le try(Scanner ...)
+    String line = in.nextLine();
+    val = Double.parseDouble(line);
+// ...
+```
+
+### Une série de valeurs TEXTE sur la même ligne
+
+Cet algorithme utilise `split()` qui sépare des mots en éléments d'une liste utilisant un séparateur fourni en argument. On peut spécifier un séparateur différent en le passant comme argument, comme `" "` pour un espace ou `","` pour la virgule.
+
+```java
+String[] items;
+// ...
+    // dans le try(Scanner ...)
+    items = in.nextLine().split(" "); // séparé par des espaces
+    // items = in.nextLine().split(","); // séparé par des virgules
+// ...
+```
+
+### Une série de valeurs de types autres que - ou mélangés avec - des String
+
+Connaissant le type à chaque position potentielle d'un item on a deux options :
+
+1. Extraire un tableau de String (voir ci-dessus) et convertir les valeurs nécessaires individuellement par la suite
+2. Passer item-par-item sur la ligne avec une séquence appropriée de commandes `next()` puis passer à la ligne suivante avec `nextLine()`
+
+Pour l'option 2, pour p.ex. : String, int, float, String :
+
+```java
+// variables qui utilisent / collectent les données extraites
+    // dans le try(Scanner ...)
+    String first  = in.next();
+    int    second = in.nextInt();
+    double third  = in.nextDouble();
+    String last   = in.next();
+    in.nextLine(); // optionnel si la structure est garantie
+//...
+```
+
+### Plusieurs lignes
+
+Placez ces algorithmes dans des boucles appropriées pour le nombre de lignes à lire.
